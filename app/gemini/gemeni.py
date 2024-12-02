@@ -20,17 +20,16 @@ class Gemini:
         else:
             response = self.model_img.generate_content([request.prompt, upload_image(request.img)], stream=True)
             response.resolve()
-            return to_markdown(response.text)
+            return {'response': to_markdown(response.text)}
 
     async def gemini_chat(self, request: str):
         history = await self.get_history_from_db()
-        print(history)
         chat = self.model_text.start_chat(history=history)
 
         response = await chat.send_message_async(request)
         response = to_markdown(response.text)
         await self.save_message_to_db(request, response)
-        return response
+        return {'response': response}
 
     async def gemini_clear_chat(self):
         result = ''

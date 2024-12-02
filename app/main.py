@@ -1,10 +1,18 @@
 from fastapi import FastAPI
 from app.gemini.gemeni import Gemini
 from app.schema.prompt import RequestBodyPrompt
+from fastapi.middleware.cors import CORSMiddleware
 from app.config.db import create_db
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def root():
@@ -21,6 +29,7 @@ async def gemini_pront(request: RequestBodyPrompt):
 async def gemini_chat(request: str):
     response = await Gemini().gemini_chat(request)
     return response
+
 
 @app.get("/gemini/clear-chat")
 async def gemini_clear_chat():
