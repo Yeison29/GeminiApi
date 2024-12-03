@@ -2,9 +2,11 @@ from fastapi import FastAPI
 from app.gemini.gemeni import Gemini
 from app.schema.prompt import RequestBodyPrompt
 from fastapi.middleware.cors import CORSMiddleware
+import os
 from app.config.db import create_db
 
 app = FastAPI()
+port = int(os.getenv("PORT", 8000))
 
 app.add_middleware(
     CORSMiddleware,
